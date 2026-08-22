@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Subtle Outer Border Glow -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="32dp" />
+            <gradient
+                android:type="linear"
+                android:angle="315"
+                android:startColor="#4D8A68F8"
+                android:endColor="#4D3B82F6" />
+        </shape>
+    </item>
+
+    <!-- Inner Gradient Body -->
+    <item
+        android:top="1.5dp"
+        android:bottom="1.5dp"
+        android:left="1.5dp"
+        android:right="1.5dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="31dp" />
+            <gradient
+                android:type="linear"
+                android:angle="315"
+                android:startColor="#1E1438"
+                android:centerColor="#0E0B1F"
+                android:endColor="#0B1333" />
+        </shape>
+    </item>
+
+</layer-list>

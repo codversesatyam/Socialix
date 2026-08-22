@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    android:background="@drawable/bg_splash_gradient"
+    tools:context=".MainActivity">
+
+    <!-- Vector Logo -->
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_logo_letter"
+        android:contentDescription="Socialix Logo"
+        android:scaleType="fitCenter" />
+
+    <!-- App Name -->
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Socialix"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/sora_semibold"
+        android:textSize="34sp"
+        android:gravity="center" />
+
+    <!-- Tagline -->
+    <TextView
+        android:id="@+id/tagline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Create. Automate. Grow."
+        android:textColor="#B9B2C9"
+        android:fontFamily="@font/sora_regular"
+        android:textSize="15sp"
+        android:gravity="center" />
+
+    <!-- 3 Subtle Indicator Dots -->
+    <LinearLayout
+        android:id="@+id/dotsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <View
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginHorizontal="3dp"
+            android:background="@drawable/dot_violet" />
+
+        <View
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginHorizontal="3dp"
+            android:background="@drawable/dot_purple" />
+
+        <View
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginHorizontal="3dp"
+            android:background="@drawable/dot_blue" />
+
+    </LinearLayout>
+
+</LinearLayout>

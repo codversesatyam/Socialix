@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Core Backgrounds -->
+    <color name="bg_dark">#0D0B1A</color>
+    <color name="bg_midnight">#080612</color>
+
+    <!-- Brand Accents -->
+    <color name="accent_violet">#7C3AED</color>
+    <color name="accent_purple">#A855F7</color>
+    <color name="accent_blue">#3B82F6</color>
+
+    <!-- Text & Content -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B9B2C9</color>
+    <color name="text_muted">#9E9EB8</color>
+</resources>
