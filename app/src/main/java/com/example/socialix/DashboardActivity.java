@@ -3,74 +3,151 @@ package com.example.socialix;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
+import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import com.example.socialix.DataManager;
+import com.example.socialix.models.PostModel;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class DashboardActivity extends AppCompatActivity {
+
+    private TextView tvTotalPostsStat;
+    private TextView tvScheduledPostsStat;
+    private TextView tvUpcomingPostContent;
+    private TextView tvUpcomingPostDate;
+    private TextView tvPostIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dashboard);
 
-        // Safely apply system bar insets
-        View root = findViewById(android.R.id.content);
-        if (root != null) {
-            ViewCompat.setOnApplyWindowInsetsListener(root, (view, insets) -> {
-                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-                view.setPadding(0, systemBars.top, 0, 0);
-                return insets;
-            });
-        }
+        // Bind Dynamic Stats and Upcoming Post Card Views
+        tvTotalPostsStat = findViewById(R.id.tvTotalPostsStat);
+        tvScheduledPostsStat = findViewById(R.id.tvScheduledPostsStat);
+        tvUpcomingPostContent = findViewById(R.id.tvUpcomingPostContent);
+        tvUpcomingPostDate = findViewById(R.id.tvUpcomingPostDate);
+        tvPostIcon = findViewById(R.id.tvPostIcon);
 
-        View ivAiHeader = findViewById(R.id.ivAiHeader);
-        View ivMessagesHeader = findViewById(R.id.ivMessagesHeader);
-        View ivNotification = findViewById(R.id.ivNotification);
-        View ivProfileHeader = findViewById(R.id.ivProfileHeader);
-
-        if (ivAiHeader != null) {
-            ivAiHeader.setOnClickListener(v -> startActivity(new Intent(this, AiAssistantActivity.class)));
-        }
-
-        if (ivMessagesHeader != null) {
-            ivMessagesHeader.setOnClickListener(v -> startActivity(new Intent(this, MessagesActivity.class)));
-        }
-
+        // Header Actions
+        ImageView ivNotification = findViewById(R.id.ivNotification);
         if (ivNotification != null) {
             ivNotification.setOnClickListener(v -> startActivity(new Intent(this, NotificationsActivity.class)));
         }
 
+        ImageView ivMessagesHeader = findViewById(R.id.ivMessagesHeader);
+        if (ivMessagesHeader != null) {
+            ivMessagesHeader.setOnClickListener(v -> startActivity(new Intent(this, MessagesActivity.class)));
+        }
+
+        TextView ivAiHeader = findViewById(R.id.ivAiHeader);
+        if (ivAiHeader != null) {
+            ivAiHeader.setOnClickListener(v -> startActivity(new Intent(this, AiAssistantActivity.class)));
+        }
+
+        TextView ivProfileHeader = findViewById(R.id.ivProfileHeader);
         if (ivProfileHeader != null) {
             ivProfileHeader.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
         }
 
-        // Bottom Navigation Views
-        View tabHome = findViewById(R.id.tabHome);
-        View tabCalendar = findViewById(R.id.tabCalendar);
+        // Bottom Navigation Bar
         View tabCreatePost = findViewById(R.id.tabCreatePost);
-        View tabAnalytics = findViewById(R.id.tabAnalytics);
-        View tabProfile = findViewById(R.id.tabProfile);
-
         if (tabCreatePost != null) {
             tabCreatePost.setOnClickListener(v -> startActivity(new Intent(this, CreatePostActivity.class)));
         }
 
+        View tabCalendar = findViewById(R.id.tabCalendar);
         if (tabCalendar != null) {
             tabCalendar.setOnClickListener(v -> startActivity(new Intent(this, CalendarActivity.class)));
         }
 
+        View tabAnalytics = findViewById(R.id.tabAnalytics);
         if (tabAnalytics != null) {
             tabAnalytics.setOnClickListener(v -> startActivity(new Intent(this, AnalyticsActivity.class)));
         }
 
+        View tabProfile = findViewById(R.id.tabProfile);
         if (tabProfile != null) {
             tabProfile.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // 1. Initial UI update from current in-memory cache
+        renderDashboardData();
+
+        // 2. Refresh live from PostgreSQL backend
+        DataManager.getInstance().syncFeedFromCloud(success -> {
+            runOnUiThread(() -> {
+                if (success) {
+                    renderDashboardData();
+                }
+            });
+        });
+    }
+
+    private void renderDashboardData() {
+        List<PostModel> allPosts = DataManager.getInstance().getAllPosts();
+
+        // Count total and scheduled
+        int totalCount = allPosts.size();
+        int scheduledCount = 0;
+        for (PostModel p : allPosts) {
+            if ("SCHEDULED".equalsIgnoreCase(p.getStatus())) {
+                scheduledCount++;
+            }
+        }
+
+        if (tvTotalPostsStat != null) {
+            tvTotalPostsStat.setText(String.valueOf(totalCount));
+        }
+        if (tvScheduledPostsStat != null) {
+            tvScheduledPostsStat.setText(String.valueOf(scheduledCount));
+        }
+
+        // Upcoming Post Card
+        PostModel nextPost = DataManager.getInstance().getNextUpcomingPost();
+        if (nextPost != null) {
+            if (tvUpcomingPostContent != null) {
+                tvUpcomingPostContent.setText(nextPost.getContent());
+            }
+
+            if (tvUpcomingPostDate != null && nextPost.getScheduledTimestamp() != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy • hh:mm a", Locale.getDefault());
+                tvUpcomingPostDate.setText(sdf.format(new Date(nextPost.getScheduledTimestamp())));
+            }
+
+            if (tvPostIcon != null && nextPost.getPlatforms() != null && !nextPost.getPlatforms().isEmpty()) {
+                String firstPlatform = nextPost.getPlatforms().get(0).toLowerCase();
+                if (firstPlatform.contains("linkedin")) {
+                    tvPostIcon.setText("💼");
+                } else if (firstPlatform.contains("twitter") || firstPlatform.contains("x")) {
+                    tvPostIcon.setText("𝕏");
+                } else if (firstPlatform.contains("tiktok")) {
+                    tvPostIcon.setText("♪");
+                } else {
+                    tvPostIcon.setText("📷");
+                }
+            }
+        } else {
+            if (tvUpcomingPostContent != null) {
+                tvUpcomingPostContent.setText("No upcoming posts scheduled");
+            }
+            if (tvUpcomingPostDate != null) {
+                tvUpcomingPostDate.setText("Tap + below to create one");
+            }
+        }
+    }
 }
+
+
+
+

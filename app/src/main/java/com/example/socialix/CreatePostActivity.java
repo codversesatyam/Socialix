@@ -18,10 +18,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.socialix.models.NotificationItem;
 import com.example.socialix.models.PostModel;
+import com.example.socialix.network.ApiClient;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CreatePostActivity extends AppCompatActivity {
 
@@ -36,7 +41,7 @@ public class CreatePostActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_create_post);
 
-        // System bar insets
+        // System bar insets handling
         View root = findViewById(android.R.id.content);
         if (root != null) {
             ViewCompat.setOnApplyWindowInsetsListener(root, (view, insets) -> {
@@ -46,6 +51,7 @@ public class CreatePostActivity extends AppCompatActivity {
             });
         }
 
+        // View Bindings
         btnBack = findViewById(R.id.btnBack);
         etPostContent = findViewById(R.id.etPostContent);
         tvCharCounter = findViewById(R.id.tvCharCounter);
@@ -75,10 +81,10 @@ public class CreatePostActivity extends AppCompatActivity {
             });
         }
 
-        // AI Quick Actions
+        // AI Working
         if (chipImprove != null) {
             chipImprove.setOnClickListener(v ->
-                    Toast.makeText(this, "AI: Improving content clarity & tone...", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "AI: Improving clarity & engagement tone...", Toast.LENGTH_SHORT).show()
             );
         }
 
@@ -92,11 +98,11 @@ public class CreatePostActivity extends AppCompatActivity {
 
         if (chipShorten != null) {
             chipShorten.setOnClickListener(v ->
-                    Toast.makeText(this, "AI: Shortening post for better engagement...", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "AI: Shortening post for punchy delivery...", Toast.LENGTH_SHORT).show()
             );
         }
 
-        // Save as Draft Action
+        //  Save as Local Draft
         if (btnSaveDraft != null && etPostContent != null) {
             btnSaveDraft.setOnClickListener(v -> {
                 String text = etPostContent.getText().toString().trim();
@@ -114,12 +120,12 @@ public class CreatePostActivity extends AppCompatActivity {
                 );
 
                 DataManager.getInstance().addPost(draftPost);
-                Toast.makeText(this, "Draft saved successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Draft saved locally!", Toast.LENGTH_SHORT).show();
                 finish();
             });
         }
 
-        // Schedule Post Action
+        // Schedule Post to Spring Boot Backend
         if (btnSchedule != null && etPostContent != null) {
             btnSchedule.setOnClickListener(v -> {
                 String text = etPostContent.getText().toString().trim();
@@ -128,29 +134,75 @@ public class CreatePostActivity extends AppCompatActivity {
                     return;
                 }
 
+                btnSchedule.setEnabled(false);
+                btnSchedule.setText("Scheduling...");
+
                 PostModel newPost = new PostModel(
-                        UUID.randomUUID().toString(),
+                        null,
                         text,
                         Arrays.asList("LinkedIn", "Instagram"),
                         System.currentTimeMillis() + 7200000,
                         "SCHEDULED"
                 );
 
-                DataManager.getInstance().addPost(newPost);
+                ApiClient.getService().createPost(newPost).enqueue(new Callback<PostModel>() {
+                    @Override
+                    public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+                        btnSchedule.setEnabled(true);
+                        btnSchedule.setText("Schedule");
 
-                // Add Notification Record
-                NotificationItem alert = new NotificationItem(
-                        UUID.randomUUID().toString(),
-                        "Post Scheduled Successfully",
-                        "Your scheduled post has been added to the queue.",
-                        "Just now",
-                        NotificationItem.Type.PUBLISHED
-                );
-                DataManager.getInstance().getNotifications().add(0, alert);
+                        if (response.isSuccessful() && response.body() != null) {
+                            DataManager.getInstance().addPost(response.body());
 
-                Toast.makeText(this, "Post scheduled successfully!", Toast.LENGTH_SHORT).show();
-                finish();
+                            NotificationItem alert = new NotificationItem(
+                                    UUID.randomUUID().toString(),
+                                    "Post Scheduled to Cloud",
+                                    "Your post was successfully persisted in PostgreSQL.",
+                                    "Just now",
+                                    NotificationItem.Type.PUBLISHED
+                            );
+                            DataManager.getInstance().getNotifications().add(0, alert);
+
+                            Toast.makeText(CreatePostActivity.this, "Saved to Cloud DB!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            // Fallback to local cache if backend is unreachable
+                            fallbackLocalSchedule(newPost);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<PostModel> call, Throwable t) {
+                        btnSchedule.setEnabled(true);
+                        btnSchedule.setText("Schedule");
+                        // Fallback to local cache when server offline
+                        fallbackLocalSchedule(newPost);
+                    }
+                });
             });
         }
+    }
+
+    private void fallbackLocalSchedule(PostModel post) {
+        post = new PostModel(
+                UUID.randomUUID().toString(),
+                post.getContent(),
+                post.getPlatforms(),
+                post.getScheduledTimestamp(),
+                post.getStatus()
+        );
+        DataManager.getInstance().addPost(post);
+
+        NotificationItem alert = new NotificationItem(
+                UUID.randomUUID().toString(),
+                "Post Scheduled (Offline)",
+                "Post cached locally in data queue.",
+                "Just now",
+                NotificationItem.Type.PUBLISHED
+        );
+        DataManager.getInstance().getNotifications().add(0, alert);
+
+        Toast.makeText(this, "Post scheduled in local queue!", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

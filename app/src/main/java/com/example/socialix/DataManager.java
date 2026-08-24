@@ -26,7 +26,13 @@ public class DataManager {
 
     private DataManager() {
         allPosts = new ArrayList<>();
-        scheduledPostQueue = new PriorityQueue<>();
+        scheduledPostQueue = new PriorityQueue<>(
+                (p1, p2) -> {
+                    Long t1 = p1.getScheduledTimestamp() != null ? p1.getScheduledTimestamp() : 0L;
+                    Long t2 = p2.getScheduledTimestamp() != null ? p2.getScheduledTimestamp() : 0L;
+                    return Long.compare(t1, t2);
+                }
+        );
         chatHistory = new LinkedList<>();
         notificationList = new ArrayList<>();
         seedInitialData();
@@ -43,7 +49,7 @@ public class DataManager {
         // Initial Posts
         addPost(new PostModel("1", "Super excited to announce our upcoming feature release! Stay tuned ",
                 Arrays.asList("LinkedIn", "Instagram"), System.currentTimeMillis() + 3600000, "SCHEDULED"));
-        addPost(new PostModel("2", "10 tips to optimize Android Studio memory and Gradle build speed ⚡",
+        addPost(new PostModel("2", "10 tips to optimize Android Studio memory and Gradle build speed ",
                 Collections.singletonList("LinkedIn"), System.currentTimeMillis() + 86400000, "SCHEDULED"));
 
         // Initial Chat History
@@ -58,7 +64,7 @@ public class DataManager {
     // --- Post Operations ---
     public void addPost(PostModel post) {
         allPosts.add(0, post);
-        if ("SCHEDULED".equals(post.getStatus())) {
+        if ("SCHEDULED".equalsIgnoreCase(post.getStatus())) {
             scheduledPostQueue.offer(post);
         }
     }
@@ -92,5 +98,36 @@ public class DataManager {
         for (NotificationItem item : notificationList) {
             item.setRead(true);
         }
+    }
+
+    public interface CloudSyncCallBack{
+        void onSyncComplete(boolean success);
+    }
+    public void syncFeedFromCloud(CloudSyncCallBack callback){
+        com.example.socialix.network.ApiClient.getService().getAllPosts().enqueue(new retrofit2.Callback<List<PostModel>>(){
+            @Override
+            public void onResponse(retrofit2.Call<List<PostModel>> call , retrofit2.Response<List<PostModel>>  response){
+                if(response.isSuccessful() && response.body() != null){
+                    allPosts.clear();
+                    scheduledPostQueue.clear();
+
+                    for(PostModel post : response.body()){
+                        allPosts.add(post);
+                        if("SCHEDULED".equalsIgnoreCase(post.getStatus())){
+                            scheduledPostQueue.offer(post);
+                        }
+                    }
+                    if(callback != null) callback.onSyncComplete(true);
+                } else {
+                    if(callback != null) callback.onSyncComplete(false);
+                }
+            }
+            @Override
+            public void onFailure(retrofit2.Call<List<PostModel>> call , Throwable t) {
+
+                if(callback != null) callback.onSyncComplete(false);
+
+            }
+        });
     }
 }
