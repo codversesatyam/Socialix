@@ -1,5 +1,7 @@
 package com.example.socialix;
 
+import android.content.Context;
+
 import com.example.socialix.models.ChatMessage;
 import com.example.socialix.models.NotificationItem;
 import com.example.socialix.models.PostModel;
@@ -103,30 +105,29 @@ public class DataManager {
     public interface CloudSyncCallBack{
         void onSyncComplete(boolean success);
     }
-    public void syncFeedFromCloud(CloudSyncCallBack callback){
-        com.example.socialix.network.ApiClient.getService().getAllPosts().enqueue(new retrofit2.Callback<List<PostModel>>(){
+    public void syncFeedFromCloud(Context context, CloudSyncCallBack callback) {
+        com.example.socialix.network.ApiClient.getApiService(context).getPosts().enqueue(new retrofit2.Callback<List<PostModel>>() {
             @Override
-            public void onResponse(retrofit2.Call<List<PostModel>> call , retrofit2.Response<List<PostModel>>  response){
-                if(response.isSuccessful() && response.body() != null){
+            public void onResponse(retrofit2.Call<List<PostModel>> call, retrofit2.Response<List<PostModel>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Update local list
                     allPosts.clear();
-                    scheduledPostQueue.clear();
-
-                    for(PostModel post : response.body()){
-                        allPosts.add(post);
-                        if("SCHEDULED".equalsIgnoreCase(post.getStatus())){
-                            scheduledPostQueue.offer(post);
-                        }
+                    allPosts.addAll(response.body());
+                    if (callback != null) {
+                        callback.onSyncComplete(true);
                     }
-                    if(callback != null) callback.onSyncComplete(true);
                 } else {
-                    if(callback != null) callback.onSyncComplete(false);
+                    if (callback != null) {
+                        callback.onSyncComplete(false);
+                    }
                 }
             }
+
             @Override
-            public void onFailure(retrofit2.Call<List<PostModel>> call , Throwable t) {
-
-                if(callback != null) callback.onSyncComplete(false);
-
+            public void onFailure(retrofit2.Call<List<PostModel>> call, Throwable t) {
+                if (callback != null) {
+                    callback.onSyncComplete(false);
+                }
             }
         });
     }

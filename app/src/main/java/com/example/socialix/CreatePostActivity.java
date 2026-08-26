@@ -145,7 +145,7 @@ public class CreatePostActivity extends AppCompatActivity {
                         "SCHEDULED"
                 );
 
-                ApiClient.getService().createPost(newPost).enqueue(new Callback<PostModel>() {
+                ApiClient.getApiService(this).createPost(newPost).enqueue(new Callback<PostModel>() {
                     @Override
                     public void onResponse(Call<PostModel> call, Response<PostModel> response) {
                         btnSchedule.setEnabled(true);

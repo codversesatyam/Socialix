@@ -1,31 +1,34 @@
 package com.example.socialix.network;
 
+import android.content.Context;
+
+import com.example.socialix.network.ApiService;
+import com.example.socialix.network.AuthInterceptor;
+import com.example.socialix.utils.TokenManager;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-
-    // 10.0.2.2 points to localhost from Android Emulator
     private static final String BASE_URL = "http://10.0.2.2:8080/";
-    private static Retrofit retrofit = null;
+    private static ApiService apiService;
 
-    public static ApiService getService() {
-        if (retrofit == null) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+    public static ApiService getApiService(Context context) {
+        if (apiService == null) {
+            TokenManager tokenManager = new TokenManager(context.getApplicationContext());
 
             OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(logging)
+                    .addInterceptor(new AuthInterceptor(tokenManager))
                     .build();
 
-            retrofit = new Retrofit.Builder()
+            Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
+
+            apiService = retrofit.create(ApiService.class);
         }
-        return retrofit.create(ApiService.class);
+        return apiService;
     }
 }

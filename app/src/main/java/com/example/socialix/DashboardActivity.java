@@ -85,7 +85,7 @@ public class DashboardActivity extends AppCompatActivity {
         renderDashboardData();
 
         // 2. Refresh live from PostgreSQL backend
-        DataManager.getInstance().syncFeedFromCloud(success -> {
+        DataManager.getInstance().syncFeedFromCloud(this, success -> {
             runOnUiThread(() -> {
                 if (success) {
                     renderDashboardData();
