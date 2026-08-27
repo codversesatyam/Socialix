@@ -1,5 +1,6 @@
 package com.example.socialix.network;
 
+import com.example.socialix.models.AnalyticsModel;
 import com.example.socialix.models.AuthRequest;
 import com.example.socialix.models.AuthResponse;
 import com.example.socialix.models.PostModel;
@@ -8,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -22,4 +24,7 @@ public interface ApiService {
 
     @POST("api/posts")
     Call<PostModel> createPost(@Body PostModel post);
+
+    @GET("api/analytics")
+    Call<AnalyticsModel> getAnalytics(@Query("range") String range);
 }

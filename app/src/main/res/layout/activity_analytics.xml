@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="@drawable/bg_splash_gradient"
     tools:context=".AnalyticsActivity">
 
@@ -10,34 +11,36 @@
     <RelativeLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="56dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:elevation="10dp"
         android:paddingHorizontal="16dp">
 
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
             android:src="@drawable/ic_back_arrow"
             android:contentDescription="Back" />
 
         <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/btnBack"
             android:fontFamily="@font/sora_bold"
             android:text="Analytics"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="⋮"
-            android:textColor="#FFFFFF"
-            android:textSize="22sp" />
     </RelativeLayout>
 
     <!-- Scrollable Main Content -->
@@ -53,22 +56,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingHorizontal="20dp"
-            android:paddingTop="8dp"
+            android:paddingTop="12dp"
             android:paddingBottom="24dp">
 
-            <!-- Timeframe Filter Chips -->
+            <!-- Time Filter Chips Row -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:orientation="horizontal">
+                android:layout_height="44dp"
+                android:background="@drawable/bg_stat_card_dark"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:weightSum="4">
 
                 <TextView
-                    android:id="@+id/filter7D"
+                    android:id="@+id/btnFilter7D"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginEnd="4dp"
-                    android:background="@drawable/bg_filter_active"
+                    android:background="@drawable/bg_gradient_btn"
                     android:gravity="center"
                     android:fontFamily="@font/sora_semibold"
                     android:text="7D"
@@ -76,46 +82,40 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/filter30D"
+                    android:id="@+id/btnFilter30D"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginHorizontal="4dp"
-                    android:background="@drawable/bg_filter_inactive"
                     android:gravity="center"
                     android:fontFamily="@font/sora_regular"
                     android:text="30D"
-                    android:textColor="#B9B2C9"
+                    android:textColor="#6B6282"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/filter90D"
+                    android:id="@+id/btnFilter90D"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginHorizontal="4dp"
-                    android:background="@drawable/bg_filter_inactive"
                     android:gravity="center"
                     android:fontFamily="@font/sora_regular"
                     android:text="90D"
-                    android:textColor="#B9B2C9"
+                    android:textColor="#6B6282"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/filter1Y"
+                    android:id="@+id/btnFilter1Y"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginStart="4dp"
-                    android:background="@drawable/bg_filter_inactive"
                     android:gravity="center"
                     android:fontFamily="@font/sora_regular"
                     android:text="1Y"
-                    android:textColor="#B9B2C9"
+                    android:textColor="#6B6282"
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <!-- Total Reach Chart Card -->
+            <!-- Total Reach Metric Card with Live Graph -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -124,285 +124,68 @@
                 android:orientation="vertical"
                 android:padding="18dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sora_regular"
-                    android:text="Total Reach"
-                    android:textColor="#B9B2C9"
-                    android:textSize="12sp" />
-
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp">
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvTotalReachLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sora_regular"
+                        android:text="Total Activity"
+                        android:textColor="#B9B2C9"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/badgeGrowth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:background="@drawable/bg_status_scheduled"
+                        android:fontFamily="@font/sora_semibold"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="4dp"
+                        android:text="+0%"
+                        android:textColor="#34D399"
+                        android:textSize="11sp" />
 
                     <TextView
                         android:id="@+id/tvTotalReachValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/tvTotalReachLabel"
+                        android:layout_marginTop="6dp"
                         android:fontFamily="@font/sora_bold"
-                        android:text="24,892"
+                        android:text="0"
                         android:textColor="#FFFFFF"
                         android:textSize="26sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/bg_badge_growth"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="4dp"
-                        android:fontFamily="@font/sora_semibold"
-                        android:text="↗ +32%"
-                        android:textColor="#34D399"
-                        android:textSize="12sp" />
                 </RelativeLayout>
 
-                <!-- Visual Wave/Line Chart Representation -->
-                <RelativeLayout
+                <!-- MPAndroidChart Line Chart Component -->
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChart"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="16dp">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_alignParentBottom="true"
-                        android:background="#231A3D" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_centerVertical="true"
-                        android:background="#1A1333" />
-
-                    <!-- Stylized Vector Curve Placeholder -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:fontFamily="@font/sora_bold"
-                        android:text="📈"
-                        android:textColor="#7C3AED"
-                        android:textSize="42sp" />
-                </RelativeLayout>
+                    android:layout_height="200dp"
+                    android:layout_marginTop="16dp" />
             </LinearLayout>
 
-            <!-- Platform Performance Section -->
+            <!-- Live Platform Breakdown Container -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/sora_semibold"
-                android:text="Platform Performance"
+                android:text="Active Platform Activity"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 
-            <!-- Platform Item 1: Instagram -->
             <LinearLayout
+                android:id="@+id/layoutPlatformContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/bg_stat_card_dark"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/iconIg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📷"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_toEndOf="@id/iconIg"
-                        android:fontFamily="@font/sora_semibold"
-                        android:text="Instagram"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:fontFamily="@font/sora_bold"
-                        android:text="12.8K  (+28%)"
-                        android:textColor="#34D399"
-                        android:textSize="12sp" />
-                </RelativeLayout>
-
-                <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="6dp"
-                    android:layout_marginTop="12dp"
-                    android:max="100"
-                    android:progress="68"
-                    android:progressDrawable="@drawable/bg_progress_gradient" />
-            </LinearLayout>
-
-            <!-- Platform Item 2: LinkedIn -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_stat_card_dark"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/iconLi"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/ic_linkedin"
-                        android:contentDescription="LinkedIn" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_toEndOf="@id/iconLi"
-                        android:fontFamily="@font/sora_semibold"
-                        android:text="LinkedIn"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:fontFamily="@font/sora_bold"
-                        android:text="8.4K  (+35%)"
-                        android:textColor="#34D399"
-                        android:textSize="12sp" />
-                </RelativeLayout>
-
-                <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="6dp"
-                    android:layout_marginTop="12dp"
-                    android:max="100"
-                    android:progress="45"
-                    android:progressDrawable="@drawable/bg_progress_gradient" />
-            </LinearLayout>
-
-            <!-- Platform Item 3: X / Twitter -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_stat_card_dark"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/iconTw"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/sora_bold"
-                        android:text="𝕏"
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_toEndOf="@id/iconTw"
-                        android:fontFamily="@font/sora_semibold"
-                        android:text="X (Twitter)"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:fontFamily="@font/sora_bold"
-                        android:text="5.2K  (+21%)"
-                        android:textColor="#34D399"
-                        android:textSize="12sp" />
-                </RelativeLayout>
-
-                <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="6dp"
-                    android:layout_marginTop="12dp"
-                    android:max="100"
-                    android:progress="28"
-                    android:progressDrawable="@drawable/bg_progress_gradient" />
-            </LinearLayout>
-
-            <!-- Platform Item 4: TikTok -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_stat_card_dark"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/iconTt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/sora_bold"
-                        android:text="♪"
-                        android:textColor="#38BDF8"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_toEndOf="@id/iconTt"
-                        android:fontFamily="@font/sora_semibold"
-                        android:text="TikTok"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:fontFamily="@font/sora_bold"
-                        android:text="3.1K  (+42%)"
-                        android:textColor="#34D399"
-                        android:textSize="12sp" />
-                </RelativeLayout>
-
-                <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="6dp"
-                    android:layout_marginTop="12dp"
-                    android:max="100"
-                    android:progress="18"
-                    android:progressDrawable="@drawable/bg_progress_gradient" />
-            </LinearLayout>
+                android:orientation="vertical" />
 
         </LinearLayout>
     </ScrollView>
@@ -418,7 +201,6 @@
         android:orientation="horizontal"
         android:weightSum="5">
 
-        <!-- Tab 1: Home -->
         <LinearLayout
             android:id="@+id/tabHome"
             android:layout_width="0dp"
@@ -443,7 +225,6 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- Tab 2: Calendar -->
         <LinearLayout
             android:id="@+id/tabCalendar"
             android:layout_width="0dp"
@@ -455,8 +236,8 @@
             <ImageView
                 android:layout_width="22dp"
                 android:layout_height="22dp"
-                android:contentDescription="Calendar"
-                android:src="@drawable/ic_nav_calender" />
+                android:src="@drawable/ic_nav_calender"
+                android:contentDescription="Calendar" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -468,7 +249,6 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- Tab 3: Create (+) -->
         <FrameLayout
             android:id="@+id/tabCreatePost"
             android:layout_width="0dp"
@@ -485,7 +265,6 @@
                 android:src="@drawable/ic_nav_add" />
         </FrameLayout>
 
-        <!-- Tab 4: Analytics (Active) -->
         <LinearLayout
             android:id="@+id/tabAnalytics"
             android:layout_width="0dp"
@@ -510,7 +289,6 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- Tab 5: Profile -->
         <LinearLayout
             android:id="@+id/tabProfile"
             android:layout_width="0dp"

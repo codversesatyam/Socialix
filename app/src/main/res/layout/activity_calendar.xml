@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="@drawable/bg_splash_gradient"
     tools:context=".CalendarActivity">
 
@@ -10,21 +11,31 @@
     <RelativeLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="56dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:elevation="10dp"
         android:paddingHorizontal="16dp">
 
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
             android:src="@drawable/ic_back_arrow"
             android:contentDescription="Back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/btnBack"
             android:fontFamily="@font/sora_bold"
             android:text="Content Calendar"
             android:textColor="#FFFFFF"
@@ -35,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:padding="8dp"
             android:text="⋮"
             android:textColor="#FFFFFF"
             android:textSize="22sp" />
@@ -64,13 +76,16 @@
 
                 <TextView
                     android:id="@+id/btnPrevMonth"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
                     android:layout_alignParentStart="true"
                     android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:text="‹"
                     android:textColor="#B9B2C9"
-                    android:textSize="24sp" />
+                    android:textSize="26sp" />
 
                 <TextView
                     android:id="@+id/tvMonthYear"
@@ -78,19 +93,22 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/sora_bold"
-                    android:text="December 2024"
+                    android:text="August 2026"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/btnNextMonth"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
                     android:layout_alignParentEnd="true"
                     android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:text="›"
                     android:textColor="#B9B2C9"
-                    android:textSize="24sp" />
+                    android:textSize="26sp" />
             </RelativeLayout>
 
             <!-- Calendar Container Card -->
@@ -118,250 +136,33 @@
                     <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:fontFamily="@font/sora_regular" android:text="Sat" android:textColor="#6B6282" android:textSize="11sp" />
                 </LinearLayout>
 
-                <!-- Row 1 -->
+                <!-- Dynamic Days Grid Container -->
                 <LinearLayout
+                    android:id="@+id/layoutDaysGrid"
                     android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:weightSum="7">
-
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="1" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="2" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="3" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="4" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="5" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="6" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="7" android:textColor="#FFFFFF" android:textSize="12sp" />
-                </LinearLayout>
-
-                <!-- Row 2 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:weightSum="7">
-
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="8" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="9" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="10" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="11" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="12" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="13" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="14" android:textColor="#FFFFFF" android:textSize="12sp" />
-                </LinearLayout>
-
-                <!-- Row 3 (Day 15 Selected with highlight circle) -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:weightSum="7">
-
-                    <!-- Selected Day 15 Pill -->
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-                        <TextView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center"
-                            android:background="@drawable/bg_date_selected"
-                            android:gravity="center"
-                            android:fontFamily="@font/sora_bold"
-                            android:text="15"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-                    </FrameLayout>
-
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="16" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="17" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="18" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="19" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="20" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="21" android:textColor="#FFFFFF" android:textSize="12sp" />
-                </LinearLayout>
-
-                <!-- Row 4 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:weightSum="7">
-
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="22" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="23" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="24" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="25" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="26" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="27" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="28" android:textColor="#FFFFFF" android:textSize="12sp" />
-                </LinearLayout>
-
-                <!-- Row 5 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:weightSum="7">
-
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="29" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="30" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="31" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="" />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
             </LinearLayout>
 
-            <!-- Today's Posts Header -->
+            <!-- Date Header -->
             <TextView
+                android:id="@+id/tvSelectedDatePostsHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/sora_semibold"
-                android:text="Today's Posts (3)"
+                android:text="Scheduled Posts (0)"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 
-            <!-- Post Item 1: Published -->
-            <RelativeLayout
+            <!-- Dynamic Live Posts Container -->
+            <LinearLayout
+                android:id="@+id/layoutPostsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/bg_stat_card_dark"
-                android:padding="16dp">
-
-                <FrameLayout
-                    android:id="@+id/iconPost1"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/bg_account_chip_dark">
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_linkedin"
-                        android:contentDescription="LinkedIn" />
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/badgePublished"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/bg_status_published"
-                    android:fontFamily="@font/sora_semibold"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="5dp"
-                    android:text="Published"
-                    android:textColor="#38BDF8"
-                    android:textSize="11sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_toStartOf="@id/badgePublished"
-                    android:layout_toEndOf="@id/iconPost1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/sora_semibold"
-                        android:singleLine="true"
-                        android:text="5 Tips for Better Code"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:fontFamily="@font/sora_regular"
-                        android:text="10:00 AM"
-                        android:textColor="#B9B2C9"
-                        android:textSize="11sp" />
-                </LinearLayout>
-            </RelativeLayout>
-
-            <!-- Post Item 2: Scheduled -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_stat_card_dark"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/iconPost2"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/bg_account_chip_dark"
-                    android:gravity="center"
-                    android:text="📷"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/badgeScheduled2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/bg_status_scheduled"
-                    android:fontFamily="@font/sora_semibold"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="5dp"
-                    android:text="Scheduled"
-                    android:textColor="#34D399"
-                    android:textSize="11sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_toStartOf="@id/badgeScheduled2"
-                    android:layout_toEndOf="@id/iconPost2"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/sora_semibold"
-                        android:singleLine="true"
-                        android:text="Behind the Scenes"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:fontFamily="@font/sora_regular"
-                        android:text="2:00 PM"
-                        android:textColor="#B9B2C9"
-                        android:textSize="11sp" />
-                </LinearLayout>
-            </RelativeLayout>
+                android:orientation="vertical" />
 
         </LinearLayout>
     </ScrollView>
@@ -377,7 +178,6 @@
         android:orientation="horizontal"
         android:weightSum="5">
 
-        <!-- Tab 1: Home -->
         <LinearLayout
             android:id="@+id/tabHome"
             android:layout_width="0dp"
@@ -402,7 +202,6 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- Tab 2: Calendar (Active) -->
         <LinearLayout
             android:id="@+id/tabCalendar"
             android:layout_width="0dp"
@@ -427,7 +226,6 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- Tab 3: Create (+) -->
         <FrameLayout
             android:id="@+id/tabCreatePost"
             android:layout_width="0dp"
@@ -444,7 +242,6 @@
                 android:src="@drawable/ic_nav_add" />
         </FrameLayout>
 
-        <!-- Tab 4: Analytics -->
         <LinearLayout
             android:id="@+id/tabAnalytics"
             android:layout_width="0dp"
@@ -469,7 +266,6 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- Tab 5: Profile -->
         <LinearLayout
             android:id="@+id/tabProfile"
             android:layout_width="0dp"
@@ -493,7 +289,6 @@
                 android:textColor="#6B6282"
                 android:textSize="10sp" />
         </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>

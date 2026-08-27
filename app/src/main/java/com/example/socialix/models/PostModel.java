@@ -52,4 +52,14 @@ public class PostModel implements Serializable, Comparable<PostModel> {
         if (other.scheduledTimestamp == null) return -1;
         return Long.compare(this.scheduledTimestamp, other.scheduledTimestamp);
     }
+
+    public boolean isPublished() {
+        return "PUBLISHED".equalsIgnoreCase(this.status);
+    }
+
+    public boolean isScheduled() {
+        return "SCHEDULED".equalsIgnoreCase(this.status);
+    }
+
+
 }
