@@ -1,380 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_splash_gradient"
-    tools:context=".CreatePostActivity">
+    android:background="#0F0C20"
+    android:fillViewport="true">
 
-    <!-- Top App Bar -->
-    <RelativeLayout
-        android:id="@+id/topBar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:paddingHorizontal="16dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_back_arrow"
-            android:contentDescription="Back" />
+        <!-- Top App Bar -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp">
 
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_stat_card_dark"
+                android:padding="10dp"
+                android:src="@drawable/ic_back"
+                app:tint="#FFFFFF" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Create Post"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <!-- Post Content Input -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/sora_bold"
-            android:text="Create Post"
+            android:layout_marginBottom="8dp"
+            android:text="Post Content"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
+        <EditText
+            android:id="@+id/etPostContent"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_stat_card_dark"
+            android:gravity="top|start"
+            android:hint="What would you like to share today?"
+            android:padding="16dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#6B6282"
+            android:textSize="14sp" />
+
+        <!-- Platform Selection Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="✨"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-    <!-- Scrollable Content Area -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottomActionLayout"
-        android:layout_below="@id/topBar"
-        android:fillViewport="true">
+            android:layout_marginBottom="12dp"
+            android:text="Select Platforms"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="24dp">
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
 
-            <!-- Section 1: Platform Selection -->
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/sora_semibold"
-                android:text="Select Platform"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <!-- Instagram -->
-                <LinearLayout
-                    android:id="@+id/pillInstagram"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:background="@drawable/bg_stat_card_dark"
-                        android:gravity="center"
-                        android:text="📷"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:fontFamily="@font/sora_regular"
-                        android:text="Instagram"
-                        android:textColor="#A855F7"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <!-- LinkedIn -->
-                <LinearLayout
-                    android:id="@+id/pillLinkedIn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <FrameLayout
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:background="@drawable/bg_stat_card_dark">
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center"
-                            android:contentDescription="LinkedIn"
-                            android:src="@drawable/ic_linkedin" />
-                    </FrameLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:fontFamily="@font/sora_regular"
-                        android:text="LinkedIn"
-                        android:textColor="#B9B2C9"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <!-- X / Twitter -->
-                <LinearLayout
-                    android:id="@+id/pillTwitter"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:background="@drawable/bg_stat_card_dark"
-                        android:gravity="center"
-                        android:fontFamily="@font/sora_bold"
-                        android:text="𝕏"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:fontFamily="@font/sora_regular"
-                        android:text="X (Twitter)"
-                        android:textColor="#B9B2C9"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <!-- TikTok -->
-                <LinearLayout
-                    android:id="@+id/pillTikTok"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:background="@drawable/bg_stat_card_dark"
-                        android:gravity="center"
-                        android:fontFamily="@font/sora_bold"
-                        android:text="♪"
-                        android:textColor="#38BDF8"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:fontFamily="@font/sora_regular"
-                        android:text="TikTok"
-                        android:textColor="#B9B2C9"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- Section 2: Post Content -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:fontFamily="@font/sora_semibold"
-                android:text="Post Content"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_marginTop="12dp"
+                android:id="@+id/btnPlatformTwitter"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
                 android:background="@drawable/bg_stat_card_dark"
-                android:padding="14dp">
+                android:gravity="center"
+                android:text="Twitter"
+                android:textColor="#B9B2C9"
+                android:textSize="13sp" />
 
-                <EditText
-                    android:id="@+id/etPostContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_above="@id/tvCharCounter"
-                    android:background="@null"
-                    android:gravity="top|start"
-                    android:hint="Excited to share my latest Android project! \n\nBuilding Socialix - an AI-powered social media management app..."
-                    android:textColorHint="#6B6282"
-                    android:textColor="#FFFFFF"
-                    android:textSize="13sp"
-                    android:fontFamily="@font/sora_regular"
-                    android:inputType="textMultiLine" />
+            <TextView
+                android:id="@+id/btnPlatformLinkedIn"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_stat_card_dark"
+                android:gravity="center"
+                android:text="LinkedIn"
+                android:textColor="#B9B2C9"
+                android:textSize="13sp" />
 
-                <TextView
-                    android:id="@+id/tvCharCounter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:fontFamily="@font/sora_regular"
-                    android:text="184/2200"
-                    android:textColor="#6B6282"
-                    android:textSize="11sp" />
-            </RelativeLayout>
+            <TextView
+                android:id="@+id/btnPlatformInstagram"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_stat_card_dark"
+                android:gravity="center"
+                android:text="Instagram"
+                android:textColor="#B9B2C9"
+                android:textSize="13sp" />
+        </LinearLayout>
 
-            <!-- Section 3: Media Upload Cards -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
+        <!-- Schedule Timing Section -->
+        <LinearLayout
+            android:id="@+id/layoutSchedulePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_stat_card_dark"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-                <!-- Media Preview 1 -->
-                <TextView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:background="@drawable/bg_stat_card_dark"
-                    android:gravity="center"
-                    android:text="🖼️"
-                    android:textSize="22sp" />
-
-                <!-- Media Preview 2 -->
-                <TextView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/bg_stat_card_dark"
-                    android:gravity="center"
-                    android:text="📱"
-                    android:textSize="22sp" />
-
-                <!-- Add Button -->
-                <FrameLayout
-                    android:id="@+id/btnAddMedia"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/bg_media_add_box">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="+"
-                        android:textColor="#A855F7"
-                        android:textSize="24sp" />
-                </FrameLayout>
-            </LinearLayout>
-
-            <!-- Section 4: AI Tools -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:fontFamily="@font/sora_semibold"
-                android:text="AI Tools"
+                android:layout_marginBottom="12dp"
+                android:text="Schedule Timing (Optional)"
                 android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
-                <!-- Improve Chip -->
                 <TextView
-                    android:id="@+id/chipImprove"
+                    android:id="@+id/btnPickDate"
                     android:layout_width="0dp"
-                    android:layout_height="42dp"
-                    android:layout_weight="1"
+                    android:layout_height="44dp"
                     android:layout_marginEnd="6dp"
-                    android:background="@drawable/bg_ai_chip_dark"
-                    android:gravity="center"
-                    android:fontFamily="@font/sora_semibold"
-                    android:text="✨ Improve"
-                    android:textColor="#38BDF8"
-                    android:textSize="12sp" />
-
-                <!-- Hashtags Chip -->
-                <TextView
-                    android:id="@+id/chipHashtags"
-                    android:layout_width="0dp"
-                    android:layout_height="42dp"
                     android:layout_weight="1"
-                    android:layout_marginHorizontal="6dp"
-                    android:background="@drawable/bg_ai_chip_dark"
+                    android:background="#1B1630"
                     android:gravity="center"
-                    android:fontFamily="@font/sora_semibold"
-                    android:text="# Hashtags"
-                    android:textColor="#A855F7"
-                    android:textSize="12sp" />
+                    android:text="Select Date"
+                    android:textColor="#B9B2C9"
+                    android:textSize="13sp" />
 
-                <!-- Shorten Chip -->
                 <TextView
-                    android:id="@+id/chipShorten"
+                    android:id="@+id/btnPickTime"
                     android:layout_width="0dp"
-                    android:layout_height="42dp"
-                    android:layout_weight="1"
+                    android:layout_height="44dp"
                     android:layout_marginStart="6dp"
-                    android:background="@drawable/bg_ai_chip_dark"
+                    android:layout_weight="1"
+                    android:background="#1B1630"
                     android:gravity="center"
-                    android:fontFamily="@font/sora_semibold"
-                    android:text="✂ Shorten"
-                    android:textColor="#EC4899"
-                    android:textSize="12sp" />
+                    android:text="Select Time"
+                    android:textColor="#B9B2C9"
+                    android:textSize="13sp" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tvSelectedSchedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Post will be published immediately if left unselected"
+                android:textColor="#6B6282"
+                android:textSize="12sp" />
         </LinearLayout>
-    </ScrollView>
 
-    <!-- Bottom Actions (Save Draft & Schedule) -->
-    <LinearLayout
-        android:id="@+id/bottomActionLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/bg_bottom_nav_dark"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="14dp"
-        android:orientation="horizontal">
-
+        <!-- Submit Button -->
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSaveDraft"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_btn_secondary_dark"
-            android:text="Save Draft"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:fontFamily="@font/sora_semibold"
-            android:textSize="14sp" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSchedule"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1.2"
-            android:layout_marginStart="8dp"
+            android:id="@+id/btnSubmitPost"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
             android:background="@drawable/bg_gradient_btn"
-            android:text="Schedule  →"
+            android:text="Publish / Schedule Post"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:fontFamily="@font/sora_semibold"
-            android:textSize="14sp" />
-    </LinearLayout>
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
-</RelativeLayout>
+    </LinearLayout>
+</ScrollView>

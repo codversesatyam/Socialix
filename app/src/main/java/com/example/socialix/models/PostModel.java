@@ -36,7 +36,8 @@ public class PostModel implements Serializable, Comparable<PostModel> {
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
 
-    public List<String> getPlatforms() { return platforms; }
+    public List<String> getPlatforms() {
+        return platforms; }
     public void setPlatforms(List<String> platforms) { this.platforms = platforms; }
 
     public Long getScheduledTimestamp() { return scheduledTimestamp; }
@@ -59,6 +60,13 @@ public class PostModel implements Serializable, Comparable<PostModel> {
 
     public boolean isScheduled() {
         return "SCHEDULED".equalsIgnoreCase(this.status);
+    }
+
+    public String getPlatform() {
+        if (platforms != null && !platforms.isEmpty()) {
+            return platforms.get(0);
+        }
+        return "General";
     }
 
 

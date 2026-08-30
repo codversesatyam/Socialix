@@ -1,28 +1,25 @@
 package com.example.socialix;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.socialix.models.NotificationItem;
 import com.example.socialix.models.PostModel;
 import com.example.socialix.network.ApiClient;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,177 +29,187 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private ImageView btnBack;
     private EditText etPostContent;
-    private TextView tvCharCounter, chipImprove, chipHashtags, chipShorten;
-    private AppCompatButton btnSaveDraft, btnSchedule;
+    private TextView btnPlatformTwitter, btnPlatformLinkedIn, btnPlatformInstagram;
+    private TextView btnPickDate, btnPickTime, tvSelectedSchedule;
+    private AppCompatButton btnSubmitPost;
+
+    private final List<String> selectedPlatforms = new ArrayList<>();
+    private final Calendar scheduledCalendar = Calendar.getInstance();
+    private boolean isDatePicked = false;
+    private boolean isTimePicked = false;
+    private long finalScheduledTimestamp = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_create_post);
 
-        // System bar insets handling
-        View root = findViewById(android.R.id.content);
-        if (root != null) {
-            ViewCompat.setOnApplyWindowInsetsListener(root, (view, insets) -> {
-                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-                view.setPadding(0, systemBars.top, 0, 0);
-                return insets;
-            });
-        }
+        initViews();
+        setupPlatformSelectors();
+        setupDateTimePickers();
+        setupSubmitButton();
+    }
 
-        // View Bindings
+    private void initViews() {
         btnBack = findViewById(R.id.btnBack);
         etPostContent = findViewById(R.id.etPostContent);
-        tvCharCounter = findViewById(R.id.tvCharCounter);
-        chipImprove = findViewById(R.id.chipImprove);
-        chipHashtags = findViewById(R.id.chipHashtags);
-        chipShorten = findViewById(R.id.chipShorten);
-        btnSaveDraft = findViewById(R.id.btnSaveDraft);
-        btnSchedule = findViewById(R.id.btnSchedule);
+        btnPlatformTwitter = findViewById(R.id.btnPlatformTwitter);
+        btnPlatformLinkedIn = findViewById(R.id.btnPlatformLinkedIn);
+        btnPlatformInstagram = findViewById(R.id.btnPlatformInstagram);
+        btnPickDate = findViewById(R.id.btnPickDate);
+        btnPickTime = findViewById(R.id.btnPickTime);
+        tvSelectedSchedule = findViewById(R.id.tvSelectedSchedule);
+        btnSubmitPost = findViewById(R.id.btnSubmitPost);
 
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> finish());
-        }
+        btnBack.setOnClickListener(v -> finish());
+    }
 
-        // Live Character Counter
-        if (etPostContent != null && tvCharCounter != null) {
-            etPostContent.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    private void setupPlatformSelectors() {
+        bindPlatformToggle(btnPlatformTwitter, "Twitter");
+        bindPlatformToggle(btnPlatformLinkedIn, "LinkedIn");
+        bindPlatformToggle(btnPlatformInstagram, "Instagram");
+    }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    tvCharCounter.setText(s.length() + "/2200");
-                }
+    private void bindPlatformToggle(TextView view, String platformName) {
+        view.setOnClickListener(v -> {
+            if (selectedPlatforms.contains(platformName)) {
+                selectedPlatforms.remove(platformName);
+                view.setBackgroundResource(R.drawable.bg_stat_card_dark);
+                view.setTextColor(Color.parseColor("#B9B2C9"));
+            } else {
+                selectedPlatforms.add(platformName);
+                view.setBackgroundResource(R.drawable.bg_gradient_btn);
+                view.setTextColor(Color.WHITE);
+            }
+        });
+    }
 
-                @Override
-                public void afterTextChanged(Editable s) {}
-            });
-        }
+    private void setupDateTimePickers() {
+        Calendar now = Calendar.getInstance();
 
-        // AI Working
-        if (chipImprove != null) {
-            chipImprove.setOnClickListener(v ->
-                    Toast.makeText(this, "AI: Improving clarity & engagement tone...", Toast.LENGTH_SHORT).show()
+        btnPickDate.setOnClickListener(v -> {
+            DatePickerDialog datePicker = new DatePickerDialog(
+                    this,
+                    (view, year, month, dayOfMonth) -> {
+                        scheduledCalendar.set(Calendar.YEAR, year);
+                        scheduledCalendar.set(Calendar.MONTH, month);
+                        scheduledCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        isDatePicked = true;
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+                        btnPickDate.setText(sdf.format(scheduledCalendar.getTime()));
+                        btnPickDate.setTextColor(Color.parseColor("#38BDF8"));
+                        updateScheduleDisplay();
+                    },
+                    now.get(Calendar.YEAR),
+                    now.get(Calendar.MONTH),
+                    now.get(Calendar.DAY_OF_MONTH)
             );
-        }
+            datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+            datePicker.show();
+        });
 
-        if (chipHashtags != null && etPostContent != null) {
-            chipHashtags.setOnClickListener(v -> {
-                String current = etPostContent.getText().toString();
-                etPostContent.setText(current + (current.isEmpty() ? "" : " ") + "#AndroidDev #Socialix #AI #Design");
-                etPostContent.setSelection(etPostContent.getText().length());
-            });
-        }
+        btnPickTime.setOnClickListener(v -> {
+            TimePickerDialog timePicker = new TimePickerDialog(
+                    this,
+                    (view, hourOfDay, minute) -> {
+                        scheduledCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        scheduledCalendar.set(Calendar.MINUTE, minute);
+                        scheduledCalendar.set(Calendar.SECOND, 0);
+                        scheduledCalendar.set(Calendar.MILLISECOND, 0);
+                        isTimePicked = true;
 
-        if (chipShorten != null) {
-            chipShorten.setOnClickListener(v ->
-                    Toast.makeText(this, "AI: Shortening post for punchy delivery...", Toast.LENGTH_SHORT).show()
+                        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+                        btnPickTime.setText(sdf.format(scheduledCalendar.getTime()));
+                        btnPickTime.setTextColor(Color.parseColor("#38BDF8"));
+                        updateScheduleDisplay();
+                    },
+                    now.get(Calendar.HOUR_OF_DAY),
+                    now.get(Calendar.MINUTE),
+                    false
             );
-        }
+            timePicker.show();
+        });
+    }
 
-        //  Save as Local Draft
-        if (btnSaveDraft != null && etPostContent != null) {
-            btnSaveDraft.setOnClickListener(v -> {
-                String text = etPostContent.getText().toString().trim();
-                if (text.isEmpty()) {
-                    Toast.makeText(this, "Please enter post content first", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                PostModel draftPost = new PostModel(
-                        UUID.randomUUID().toString(),
-                        text,
-                        Collections.singletonList("Draft"),
-                        System.currentTimeMillis(),
-                        "DRAFT"
-                );
-
-                DataManager.getInstance().addPost(draftPost);
-                Toast.makeText(this, "Draft saved locally!", Toast.LENGTH_SHORT).show();
-                finish();
-            });
-        }
-
-        // Schedule Post to Spring Boot Backend
-        if (btnSchedule != null && etPostContent != null) {
-            btnSchedule.setOnClickListener(v -> {
-                String text = etPostContent.getText().toString().trim();
-                if (text.isEmpty()) {
-                    Toast.makeText(this, "Please enter post content", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                btnSchedule.setEnabled(false);
-                btnSchedule.setText("Scheduling...");
-
-                PostModel newPost = new PostModel(
-                        null,
-                        text,
-                        Arrays.asList("LinkedIn", "Instagram"),
-                        System.currentTimeMillis() + 7200000,
-                        "SCHEDULED"
-                );
-
-                ApiClient.getApiService(this).createPost(newPost).enqueue(new Callback<PostModel>() {
-                    @Override
-                    public void onResponse(Call<PostModel> call, Response<PostModel> response) {
-                        btnSchedule.setEnabled(true);
-                        btnSchedule.setText("Schedule");
-
-                        if (response.isSuccessful() && response.body() != null) {
-                            DataManager.getInstance().addPost(response.body());
-
-                            NotificationItem alert = new NotificationItem(
-                                    UUID.randomUUID().toString(),
-                                    "Post Scheduled to Cloud",
-                                    "Your post was successfully persisted in PostgreSQL.",
-                                    "Just now",
-                                    NotificationItem.Type.PUBLISHED
-                            );
-                            DataManager.getInstance().getNotifications().add(0, alert);
-
-                            Toast.makeText(CreatePostActivity.this, "Saved to Cloud DB!", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            // Fallback to local cache if backend is unreachable
-                            fallbackLocalSchedule(newPost);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<PostModel> call, Throwable t) {
-                        btnSchedule.setEnabled(true);
-                        btnSchedule.setText("Schedule");
-                        // Fallback to local cache when server offline
-                        fallbackLocalSchedule(newPost);
-                    }
-                });
-            });
+    private void updateScheduleDisplay() {
+        if (isDatePicked || isTimePicked) {
+            finalScheduledTimestamp = scheduledCalendar.getTimeInMillis();
+            SimpleDateFormat fullFormat = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", Locale.getDefault());
+            tvSelectedSchedule.setText("Scheduled for: " + fullFormat.format(scheduledCalendar.getTime()));
+            tvSelectedSchedule.setTextColor(Color.parseColor("#38BDF8"));
+            btnSubmitPost.setText("Schedule Post");
         }
     }
 
-    private void fallbackLocalSchedule(PostModel post) {
-        post = new PostModel(
-                UUID.randomUUID().toString(),
-                post.getContent(),
-                post.getPlatforms(),
-                post.getScheduledTimestamp(),
-                post.getStatus()
-        );
+    private void setupSubmitButton() {
+        btnSubmitPost.setOnClickListener(v -> {
+            String content = etPostContent.getText().toString().trim();
+
+            if (content.isEmpty()) {
+                etPostContent.setError("Please enter post content");
+                return;
+            }
+
+            if (selectedPlatforms.isEmpty()) {
+                selectedPlatforms.add("General");
+            }
+
+            PostModel post = new PostModel();
+            post.setContent(content);
+            post.setPlatforms(new ArrayList<>(selectedPlatforms));
+
+            long currentEpoch = System.currentTimeMillis();
+
+            if (isDatePicked && finalScheduledTimestamp > currentEpoch) {
+                post.setScheduledTimestamp(finalScheduledTimestamp);
+                post.setStatus("SCHEDULED");
+            } else {
+                post.setScheduledTimestamp(currentEpoch);
+                post.setStatus("PUBLISHED");
+            }
+
+            savePost(post);
+        });
+    }
+
+    private void savePost(PostModel post) {
+        btnSubmitPost.setEnabled(false);
+        btnSubmitPost.setText("Processing...");
+
+        try {
+            ApiClient.getApiService(this).createPost(post).enqueue(new Callback<PostModel>() {
+                @Override
+                public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        DataManager.getInstance().addPost(response.body());
+                    } else {
+                        saveLocallyFallback(post);
+                    }
+                    finishCreation();
+                }
+
+                @Override
+                public void onFailure(Call<PostModel> call, Throwable t) {
+                    saveLocallyFallback(post);
+                    finishCreation();
+                }
+            });
+        } catch (Exception e) {
+            saveLocallyFallback(post);
+            finishCreation();
+        }
+    }
+
+    private void saveLocallyFallback(PostModel post) {
+        if (post.getId() == null || post.getId().isEmpty()) {
+            post.setId(String.valueOf(System.currentTimeMillis()));
+        }
         DataManager.getInstance().addPost(post);
+    }
 
-        NotificationItem alert = new NotificationItem(
-                UUID.randomUUID().toString(),
-                "Post Scheduled (Offline)",
-                "Post cached locally in data queue.",
-                "Just now",
-                NotificationItem.Type.PUBLISHED
-        );
-        DataManager.getInstance().getNotifications().add(0, alert);
-
-        Toast.makeText(this, "Post scheduled in local queue!", Toast.LENGTH_SHORT).show();
+    private void finishCreation() {
+        Toast.makeText(this, "Post successfully dispatched!", Toast.LENGTH_SHORT).show();
         finish();
     }
 }
