@@ -56,6 +56,131 @@
             android:textSize="13sp" />
     </RelativeLayout>
 
+    <!-- Bottom Navigation Bar -->
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_bottom_nav_dark"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:id="@+id/tabHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_nav_home"
+                android:contentDescription="Home" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:fontFamily="@font/sora_regular"
+                android:text="Home"
+                android:textColor="#6B6282"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tabCalendar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_nav_calender"
+                android:contentDescription="Calendar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:fontFamily="@font/sora_regular"
+                android:text="Calendar"
+                android:textColor="#6B6282"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/tabCreatePost"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_fab_gradient"
+                android:contentDescription="Create Post"
+                android:padding="10dp"
+                android:src="@drawable/ic_nav_add" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/tabAnalytics"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_nav_analytics"
+                android:contentDescription="Analytics" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:fontFamily="@font/sora_regular"
+                android:text="Analytics"
+                android:textColor="#6B6282"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tabProfile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_nav_profile"
+                android:contentDescription="Profile" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:fontFamily="@font/sora_regular"
+                android:text="Profile"
+                android:textColor="#6B6282"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Bottom Input Bar -->
     <LinearLayout
         android:id="@+id/bottomInputBar"
         android:layout_width="match_parent"
@@ -96,11 +221,55 @@
         </FrameLayout>
     </LinearLayout>
 
+    <!-- Platform & Tone Selectors Bar -->
+    <LinearLayout
+        android:id="@+id/optionsBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomInputBar"
+        android:background="#0D091A"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="6dp"
+        android:weightSum="2">
+
+        <Spinner
+            android:id="@+id/spPlatform"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_stat_card_dark"
+            android:popupBackground="#120D24"
+            tools:listitem="@android:layout/simple_spinner_dropdown_item" />
+
+        <Spinner
+            android:id="@+id/spTone"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_stat_card_dark"
+            android:popupBackground="#120D24"
+            tools:listitem="@android:layout/simple_spinner_dropdown_item" />
+    </LinearLayout>
+
+    <!-- Loading ProgressBar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_centerInParent="true"
+        android:elevation="10dp"
+        android:indeterminateTint="#A855F7"
+        android:visibility="gone" />
+
     <!-- Scrollable Chat Messages Area -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottomInputBar"
+        android:layout_above="@id/optionsBar"
         android:layout_below="@id/topBar"
         android:fillViewport="true">
 
@@ -165,7 +334,7 @@
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <!-- Sample Message 1: AI Welcome Bubble -->
+            <!-- Initial AI Welcome Bubble -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -185,13 +354,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/sora_regular"
-                        android:text="Hello Satyam!I'm your AI Social Media Assistant. I can write viral captions, generate hashtag strategies, or optimize your scheduling times. What are we posting today?"
+                        android:text="Hello! I'm your AI Social Media Assistant. Select your target platform and tone above, then ask me to write a post caption!"
                         android:textColor="#FFFFFF"
                         android:textSize="13sp" />
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Sample Message 2: User Message Bubble -->
+            <!-- Sample Message 1 (User) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -216,7 +385,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Sample Message 3: AI Response Bubble with Action Chips -->
+            <!-- Sample Message 2 (AI Output) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -233,14 +402,14 @@
                     android:padding="14dp">
 
                     <TextView
+                        android:id="@+id/tvResult"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/sora_regular"
-                        android:text=" Big news! Today we are introducing Socialix — your all-in-one social media command center.\n\nDesigned to automate scheduling, analyze reach, and generate content effortlessly.\n\nCheck it out and let us know what you think! 💬"
+                        android:text="Big news! Today we are introducing Socialix — your all-in-one social media command center.\n\nDesigned to automate scheduling, analyze reach, and generate content effortlessly.\n\nCheck it out and let us know what you think! 💬"
                         android:textColor="#FFFFFF"
                         android:textSize="13sp" />
 
-                    <!-- Quick Action Chips Row -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -255,7 +424,7 @@
                             android:fontFamily="@font/sora_semibold"
                             android:gravity="center"
                             android:paddingHorizontal="10dp"
-                            android:text=" Copy"
+                            android:text="Copy"
                             android:textColor="#B9B2C9"
                             android:textSize="11sp" />
 
@@ -268,7 +437,7 @@
                             android:fontFamily="@font/sora_semibold"
                             android:gravity="center"
                             android:paddingHorizontal="10dp"
-                            android:text=" Use in Post"
+                            android:text="Use in Post"
                             android:textColor="#A855F7"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -277,135 +446,5 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <!-- Bottom Navigation Bar -->
-    <LinearLayout
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/bg_bottom_nav_dark"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:weightSum="5">
-
-        <!-- Home -->
-        <LinearLayout
-            android:id="@+id/tabHome"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@drawable/ic_nav_home"
-                android:contentDescription="Home" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:fontFamily="@font/sora_regular"
-                android:text="Home"
-                android:textColor="#6B6282"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <!--  Calendar -->
-        <LinearLayout
-            android:id="@+id/tabCalendar"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@drawable/ic_nav_calender"
-                android:contentDescription="Calendar" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:fontFamily="@font/sora_regular"
-                android:text="Calendar"
-                android:textColor="#6B6282"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <!--  Create Center Button -->
-        <FrameLayout
-            android:id="@+id/tabCreatePost"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_gravity="center"
-                android:background="@drawable/bg_fab_gradient"
-                android:contentDescription="Create Post"
-                android:padding="10dp"
-                android:src="@drawable/ic_nav_add" />
-        </FrameLayout>
-
-        <!-- Analytics -->
-        <LinearLayout
-            android:id="@+id/tabAnalytics"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@drawable/ic_nav_analytics"
-                android:contentDescription="Analytics" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:fontFamily="@font/sora_regular"
-                android:text="Analytics"
-                android:textColor="#6B6282"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <!--  Profile -->
-        <LinearLayout
-            android:id="@+id/tabProfile"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@drawable/ic_nav_profile"
-                android:contentDescription="Profile" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:fontFamily="@font/sora_regular"
-                android:text="Profile"
-                android:textColor="#6B6282"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-    </LinearLayout>
 
 </RelativeLayout>
